@@ -1,0 +1,145 @@
+/* Motion language: quiet anticipation, fast feedback, long soft landings. */
+.hero-copy { container-type: inline-size; min-width: 0; }
+.hero #hero-title { font-size: clamp(28px, 5vw, 83px); max-width: none; }
+.hero-line { display: block; white-space: nowrap; }
+@media (max-width: 640px) {
+  .hero #hero-title { font-size: 8.8vw; }
+}
+@supports (font-size: 1cqw) {
+  .hero #hero-title { font-size: min(83px, 11.5cqw); }
+}
+@media print {
+  .hero #hero-title { font-size: 38px; }
+}
+:root {
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-spring: cubic-bezier(.22, 1.15, .36, 1);
+}
+.reading-progress { width: 100%; transform: scaleX(0); transform-origin: left; }
+.site-header { transition: background .45s ease, box-shadow .45s ease; }
+.site-header.scrolled { box-shadow: 0 1px 0 #123b2710, 0 8px 32px #123b2705; }
+.desktop-nav a::after { right: 0; transform: scaleX(0); transform-origin: right; transition: transform .45s var(--ease-out); }
+.desktop-nav a:hover::after, .desktop-nav a.active::after { transform: scaleX(1); transform-origin: left; }
+.word-clip { display: inline-block; overflow: hidden; overflow: clip; vertical-align: bottom; padding: 0 .08em .19em .025em; margin: 0 -.08em -.19em -.025em; }
+.word-rise { display: inline-block; }
+.motion-ready .word-rise { animation: headline-rise 1050ms var(--ease-out) var(--word-delay) backwards; }
+.motion-ready .hero-intro { animation: soft-arrive 750ms var(--ease-out) 30ms backwards; }
+.motion-ready .hero-description { animation: soft-arrive 850ms var(--ease-out) 380ms backwards; }
+.motion-ready .hero-actions > :first-child { animation: soft-arrive 850ms var(--ease-out) 490ms backwards; }
+.motion-ready .hero-actions > :last-child { animation: soft-arrive 850ms var(--ease-out) 570ms backwards; }
+.motion-ready .portrait-stage { animation: portrait-arrive 1350ms var(--ease-out) 120ms backwards; }
+.motion-ready .hero-bottom > * { animation: soft-arrive 850ms var(--ease-out) 700ms backwards; }
+.motion-ready .hero-bottom > :nth-child(2) { animation-delay: 790ms; }
+.motion-ready .hero-bottom > :nth-child(3) { animation-delay: 850ms; }
+.portrait { transform: translate3d(0, var(--portrait-depth, 0px), 0); }
+.portrait-stage::before { content: ''; position: absolute; inset: 12% 4% 7%; border-radius: 50%; background: radial-gradient(ellipse, #c5ead71c, #e4f5dc24 45%, transparent 70%); pointer-events: none; }
+.motion-ready .portrait-stage::before { animation: aura-arrive 4500ms var(--ease-out) both; }
+.availability i { position: relative; }
+.motion-ready .availability i::after { content: ''; position: absolute; inset: -5px; border: 1px solid #4c8a6166; border-radius: 50%; opacity: 0; animation: availability-ring 1800ms ease-out 900ms 2 backwards; }
+@keyframes headline-rise {
+  from { transform: translate3d(0, 115%, 0) rotate(3deg); }
+  to { transform: translate3d(0, 0, 0) rotate(0); }
+}
+@keyframes soft-arrive {
+  from { opacity: 0; transform: translate3d(0, 20px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes portrait-arrive {
+  from { opacity: 0; transform: translate3d(0, 32px, 0) scale(.965); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes aura-arrive {
+  from { opacity: 0; transform: scale(.82) translate3d(10px, 15px, 0); }
+  to { opacity: 1; transform: scale(1) translate3d(0, 0, 0); }
+}
+@keyframes availability-ring {
+  from { opacity: .65; transform: scale(.5); }
+  to { opacity: 0; transform: scale(1.6); }
+}
+
+/* Independent translate keeps entrances compatible with card tilt. */
+.motion-ready [data-motion] {
+  transition: opacity 700ms var(--ease-out), translate 950ms var(--ease-out), box-shadow .45s ease, border-color .3s ease;
+  transition-delay: var(--reveal-delay, 0ms), var(--reveal-delay, 0ms), 0ms, 0ms;
+}
+.motion-ready [data-motion]:not(.is-revealed) { opacity: 0; translate: 0 24px; }
+.motion-ready [data-motion="card"]:not(.is-revealed) { translate: 0 38px; }
+.motion-ready [data-motion].is-revealed { opacity: 1; translate: 0 0; }
+.motion-ready [data-motion]:focus-within { opacity: 1; translate: 0 0; transition-delay: 0ms; }
+.bento-tile { transition: box-shadow .5s var(--ease-out), border-color .3s ease; }
+.bento-tile::before { background: radial-gradient(380px circle at var(--pointer-x) var(--pointer-y), #ffffff2b, transparent 67%); transition: opacity .45s ease; }
+.carbone-logo, .research-keyword { transition: transform 800ms var(--ease-out); }
+.bar-track > span { transform-origin: left; }
+.project-tags span, .scope-pills span { transition: background .3s ease, border-color .3s ease, transform .5s var(--ease-out); }
+.tools-track[data-resting="true"] { animation-play-state: paused; }
+.tools-item > * { transition: transform .6s var(--ease-out), opacity .4s ease; }
+
+/* Buttons keep stable hit targets; only three pixels of magnetic travel. */
+.button, .nav-contact, .back-top { position: relative; isolation: isolate; transform: translate3d(var(--magnet-x, 0px), var(--magnet-y, 0px), 0); transition: box-shadow .45s var(--ease-out), background .35s ease, scale .35s var(--ease-spring); }
+.button:hover, .nav-contact:hover { transform: translate3d(var(--magnet-x, 0px), var(--magnet-y, 0px), 0); filter: none; }
+.button::before, .nav-contact::before { content: ''; position: absolute; z-index: -1; inset: 0; border-radius: inherit; background: linear-gradient(120deg, #ffffff1f, transparent 70%); opacity: 0; transition: opacity .4s ease; pointer-events: none; }
+.button:hover::before, .nav-contact:hover::before { opacity: 1; }
+.button:active, .nav-contact:active, .back-top:active { scale: .97; }
+.button .icon-arrow, .quiet-link .icon-arrow, .nav-contact .icon-arrow, .text-link .icon-arrow, .download-link .icon-arrow, .back-top .icon-arrow, .contact-links .icon-arrow { transition: transform .5s var(--ease-spring); }
+.button-lime:hover .icon-arrow, .button-outline:hover .icon-arrow, .download-link:hover .icon-arrow { transform: translateY(3px); }
+.quiet-link:hover .icon-arrow, .nav-contact:hover .icon-arrow, .text-link:hover .icon-arrow, .button-green:hover .icon-arrow { transform: translate(2px, -2px); }
+.back-top:hover .icon-arrow { transform: translateY(-3px); }
+.text-link { transition: color .3s ease; gap: 23px; position: relative; }
+.text-link:hover { gap: 23px; }
+.text-link::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .5s var(--ease-out); }
+.text-link:hover::after { transform: scaleX(1); transform-origin: left; }
+.card-explore { transition: background .3s ease, box-shadow .4s ease, transform .4s var(--ease-spring); }
+.card-explore-icon, .plus { transition: transform .5s var(--ease-spring); }
+details[data-expanded="false"] .plus { transform: rotate(0); }
+details[data-expanded="true"] .plus { transform: rotate(45deg); }
+summary { transition: color .25s ease; }
+summary:hover { color: #428562; }
+.carbone-gallery-images img { transition: transform .75s var(--ease-out); }
+.carbone-gallery-images a { overflow: hidden; }
+
+/* A line gently traces the experience as it enters the viewport. */
+.timeline { position: relative; padding-left: 25px; }
+.timeline::before, .timeline::after { content: ''; position: absolute; left: 0; top: 7px; bottom: 25px; width: 1px; pointer-events: none; }
+.timeline::before { background: #c3decc28; }
+.timeline::after { background: linear-gradient(#e1f4d6, #afd9be); transform: scaleY(var(--timeline-progress, 1)); transform-origin: top; }
+.timeline-item { position: relative; }
+.timeline-item::before { content: ''; position: absolute; width: 7px; height: 7px; border-radius: 50%; top: 7px; left: -28px; background: #cde6d5; box-shadow: 0 0 0 5px #194c35; }
+.contact-links > a { position: relative; transition: background .45s ease; }
+.contact-links > a:hover { transform: none; }
+.contact-links > a::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; transform: scaleX(0); transform-origin: right; background: #357452; transition: transform .65s var(--ease-out); }
+.contact-links > a:hover::after { transform: scaleX(1); transform-origin: left; }
+.contact-links > a strong { transition: transform .65s var(--ease-out); }
+.contact-links > a:hover strong { transform: translateX(4px); }
+.contact-links > a:hover .icon-arrow { transform: translate(3px, -3px); }
+
+@media (hover: hover) and (pointer: fine) {
+  .tools-marquee:hover .tools-track { animation-play-state: paused; }
+  .tools-item:hover > * { transform: translateY(-4px) scale(1.035); }
+  .bento-tile:hover .carbone-logo { transform: translateY(-3px); }
+  .bento-tile:hover .research-keyword { transform: translateY(-4px) rotate(-2deg); }
+  .project-tags span:hover, .scope-pills span:hover { transform: translateY(-2px); }
+  .carbone-gallery-images a:hover img { transform: scale(1.025); }
+}
+@media (max-width: 640px) {
+  .motion-ready [data-motion] { transition-duration: 500ms, 650ms, .45s, .3s; }
+  .motion-ready [data-motion]:not(.is-revealed), .motion-ready [data-motion="card"]:not(.is-revealed) { translate: 0 18px; }
+  .motion-ready .word-rise { animation-duration: 850ms; }
+  .motion-ready .portrait-stage { animation-duration: 1000ms; }
+  .portrait { transform: none; }
+  .timeline { padding-left: 22px; }
+  .timeline-item::before { left: -25px; }
+}
+@media (hover: none) {
+  .bento-tile { transform: none; }
+  .button:hover, .nav-contact:hover { box-shadow: none; }
+  .contact-links > a:active { background: #bad5c329; }
+}
+@media (prefers-reduced-motion: reduce), print {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  [data-motion], .motion-ready [data-motion]:not(.is-revealed) { opacity: 1 !important; translate: none !important; }
+  .word-rise, .portrait, .bento-tile, .button, .nav-contact, .back-top, .icon-arrow, .research-keyword, .carbone-logo { transform: none !important; }
+  .button:active, .nav-contact:active, .back-top:active { scale: 1; }
+  .timeline::after { transform: scaleY(1); }
+  .availability i::after, .portrait-stage::before { display: none; }
+}
